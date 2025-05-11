@@ -1,0 +1,138 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تدريب معادلات</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f2f2f2;
+      text-align: center;
+      padding: 20px;
+    }
+    .question {
+      display: none;
+      margin-bottom: 20px;
+    }
+    .question.active {
+      display: block;
+    }
+    input[type="text"] {
+      padding: 8px;
+      width: 200px;
+      margin-top: 10px;
+    }
+    .choices button {
+      margin: 5px;
+      padding: 10px 20px;
+    }
+    .video-sticker {
+      width: 150px;
+      height: auto;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>تدريب على المعادلات</h1>
+
+  <div id="quiz-container">
+    <!-- مثال لسؤال نصي -->
+    <div class="question active" data-answer="5">
+      <img src="images/q1.jpg" alt="q1"><br />
+      <input type="text" placeholder="اكتب إجابتك هنا" />
+      <p class="feedback"></p>
+    </div>
+
+    <div class="question" data-answer="12">
+      <img src="images/q2.jpg" alt="q2"><br />
+      <input type="text" placeholder="اكتب إجابتك هنا" />
+      <p class="feedback"></p>
+    </div>
+
+    <!-- مثال لاختيارات متعددة -->
+    <div class="question" data-answer="25">
+      <img src="images/q6.jpg" alt="q6"><br />
+      <div class="choices">
+        <button>32</button>
+        <button>20</button>
+        <button>25</button>
+      </div>
+      <p class="feedback"></p>
+    </div>
+
+    <div class="question" data-answer="6">
+      <img src="images/q7.jpg" alt="q7"><br />
+      <div class="choices">
+        <button>8.4</button>
+        <button>21.4</button>
+        <button>6</button>
+      </div>
+      <p class="feedback"></p>
+    </div>
+  </div>
+
+  <!-- صوت النجاح -->
+  <audio id="yay-sound" src="yay.mp3"></audio>
+
+  <!-- الفيديو (ستيكر صغير) -->
+  <video id="success-video" class="video-sticker" src="sticker.mp4" muted></video>
+
+  <script>
+    const questions = document.querySelectorAll(".question");
+    const sound = document.getElementById("yay-sound");
+    const video = document.getElementById("success-video");
+    let current = 0;
+
+    function showQuestion(index) {
+      questions.forEach((q, i) => q.classList.toggle("active", i === index));
+    }
+
+    function showSuccess(feedback) {
+      feedback.textContent = "✅ صحيح!";
+      sound.play();
+      video.currentTime = 0;
+      feedback.appendChild(video.cloneNode(true));
+      setTimeout(() => {
+        current++;
+        if (current < questions.length) {
+          showQuestion(current);
+        }
+      }, 2000);
+    }
+
+    function showWrong(feedback) {
+      feedback.textContent = "❌ Wrong";
+    }
+
+    questions.forEach((q, index) => {
+      const answer = q.dataset.answer;
+      const input = q.querySelector("input");
+      const feedback = q.querySelector(".feedback");
+      const choices = q.querySelectorAll(".choices button");
+
+      if (input) {
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            if (input.value.trim() === answer) {
+              showSuccess(feedback);
+            } else {
+              showWrong(feedback);
+            }
+          }
+        });
+      }
+
+      choices.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (btn.textContent.trim() === answer) {
+            showSuccess(feedback);
+          } else {
+            showWrong(feedback);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
