@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -30,6 +31,7 @@
       width: 150px;
       height: auto;
       margin-top: 10px;
+      display: none; /* يبدأ الفيديو مخفي */
     }
   </style>
 </head>
@@ -38,20 +40,38 @@
 
   <div id="quiz-container">
     <!-- مثال لسؤال نصي -->
-    <div class="question active" data-answer="5">
+    <div class="question active" data-answer="3">
       <img src="images/q1.jpg" alt="q1"><br />
       <input type="text" placeholder="اكتب إجابتك هنا" />
       <p class="feedback"></p>
     </div>
 
-    <div class="question" data-answer="12">
+    <div class="question" data-answer="3">
       <img src="images/q2.jpg" alt="q2"><br />
       <input type="text" placeholder="اكتب إجابتك هنا" />
       <p class="feedback"></p>
     </div>
 
     <!-- مثال لاختيارات متعددة -->
-    <div class="question" data-answer="25">
+    <div class="question" data-answer="2">
+      <img src="images/q3.jpg" alt="q3"><br />
+      <input type="text" placeholder="اكتب إجابتك هنا" />
+      <p class="feedback"></p>
+    </div>
+
+    <div class="question" data-answer="2.5">
+      <img src="images/q4.jpg" alt="q4"><br />
+      <input type="text" placeholder="اكتب إجابتك هنا" />
+      <p class="feedback"></p>
+    </div>
+
+    <div class="question" data-answer="0">
+      <img src="images/q5.jpg" alt="q5"><br />
+      <input type="text" placeholder="اكتب إجابتك هنا" />
+      <p class="feedback"></p>
+    </div>
+
+    <div class="question" data-answer="32">
       <img src="images/q6.jpg" alt="q6"><br />
       <div class="choices">
         <button>32</button>
@@ -61,10 +81,10 @@
       <p class="feedback"></p>
     </div>
 
-    <div class="question" data-answer="6">
+    <div class="question" data-answer="8.5">
       <img src="images/q7.jpg" alt="q7"><br />
       <div class="choices">
-        <button>8.4</button>
+        <button>8.5</button>
         <button>21.4</button>
         <button>6</button>
       </div>
@@ -91,18 +111,21 @@
     function showSuccess(feedback) {
       feedback.textContent = "✅ صحيح!";
       sound.play();
+      video.style.display = "block"; // يظهر الفيديو
       video.currentTime = 0;
-      feedback.appendChild(video.cloneNode(true));
+      video.play(); // يبدأ الفيديو من البداية
+
       setTimeout(() => {
+        video.style.display = "none"; // يخفي الفيديو بعد 2 ثانية
         current++;
         if (current < questions.length) {
           showQuestion(current);
         }
-      }, 2000);
+      }, 2000); // يختفي الفيديو بعد 2 ثانية
     }
 
     function showWrong(feedback) {
-      feedback.textContent = "❌ Wrong";
+      feedback.textContent = "❌ خطأ";
     }
 
     questions.forEach((q, index) => {
