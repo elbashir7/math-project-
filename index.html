@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تدريب معادلات</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: sans-serif;
+      background-color: #f2f2f2;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    .question {
+      display: none;
+      margin-bottom: 20px;
+    }
+    .question.active {
+      display: block;
+    }
+    input[type="text"] {
+      padding: 8px;
+      width: 200px;
+      margin-top: 10px;
+    }
+    .choices button {
+      margin: 5px;
+      padding: 10px 20px;
+    }
+    .video-sticker {
+      width: 150px;
+      height: auto;
+      margin-top: 10px;
+    }
+    #win-screen {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: black;
+      z-index: 9999;
+    }
+    #win-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <h1>تدريب على المعادلات</h1>
+
+  <div id="quiz-container">
+    <div class="question active" data-answer="3">
+      <img src="images/q1.jpg" alt="q1"><br />
+      <input type="text" placeholder="اكتب إجابتك هنا" />
+      <p class="feedback"></p>
+    </div>
+
+    <div class="question" data-answer="3">
+      <img src="images/q2.jpg" alt="q2"><br />
+      <input type="text" placeholder="اكتب إجابتك هنا" />
+      <p class="feedback"></p>
+    </div>
+
+    <div class="question" data-answer="2">
+      <img src="images/q3.jpg" alt="q3"><br />
+      <input type="text" placeholder="اكتب إجابتك هنا" />
+      <p class="feedback"></p>
+    </div>
+
+    <div class="question" data-answer="2.5">
+      <img src="images/q4.jpg" alt="q4"><br />
+      <input type="text" placeholder="اكتب إجابتك هنا" />
+      <p class="feedback"></p>
+    </div>
+
+    <div class="question" data-answer="0">
+      <img src="images/q5.jpg" alt="q5"><br />
+      <input type="text" placeholder="اكتب إجابتك هنا" />
+      <p class="feedback"></p>
+    </div>
+
+    <div class="question" data-answer="32">
+      <img src="images/q6.jpg" alt="q6"><br />
+      <div class="choices">
+        <button>32</button>
+        <button>20</button>
+        <button>25</button>
+      </div>
+      <p class="feedback"></p>
+    </div>
+
+    <div class="question" data-answer="8.5">
+      <img src="images/q7.jpg" alt="q7"><br />
+      <div class="choices">
+        <button>8.5</button>
+        <button>21.4</button>
+        <button>6</button>
+      </div>
+      <p class="feedback"></p>
+    </div>
+  </div>
+
+  <!-- صوت النجاح -->
+  <audio id="yay-sound" src="yay.mp3"></audio>
+
+  <!-- الفيديو -->
+  <video id="success-video" class="video-sticker" src="sticker.mp4" muted></video>
+
+  <!-- شاشة الفوز -->
+  <div id="win-screen">
+    <img id="win-image" src="images/win.jpg" alt="win">
+    <audio id="win-sound" src="win.mp3"></audio>
+  </div>
+
+  <script>
+    const questions = document.querySelectorAll(".question");
+    const sound = document.getElementById("yay-sound");
+    const video = document.getElementById("success-video");
+    const winScreen = document.getElementById("win-screen");
+    const winSound = document.getElementById("win-sound");
+
+    let current = 0;
+
+    function showQuestion(index) {
+      questions.forEach((q, i) => q.classList.toggle("active", i === index));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showSuccess(feedback, callback) {
+      feedback.textContent = "✅ صحيح!";
+      sound.play();
+      const cloneVideo = video.cloneNode(true);
+      feedback.appendChild(cloneVideo);
+      cloneVideo.play();
+
+      cloneVideo.onended = () => {
+        if (callback) callback();
+      };
+
+      setTimeout(() => {
+        if (callback) callback();
+      }, 2000);
+    }
+
+    function showWrong(feedback) {
+      feedback.textContent = "❌ خطأ";
+    }
+
+    function showWinScreen() {
+      winScreen.style.display = "block";
+      winSound.play();
+      setTimeout(() => {
+        winScreen.style.display = "none";
+      }, 6000);
+    }
+
+    questions.forEach((q, index) => {
+      const answer = q.dataset.answer;
+      const input = q.querySelector("input");
+      const feedback = q.querySelector(".feedback");
+      const choices = q.querySelectorAll(".choices button");
+
+      const handleCorrect = () => {
+        current++;
+        if (current < questions.length) {
+          showQuestion(current);
+        } else {
+          showWinScreen();
+        }
+      };
+
+      if (input) {
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            if (input.value.trim() === answer) {
+              showSuccess(feedback, handleCorrect);
+            } else {
+              showWrong(feedback);
+            }
+          }
+        });
+      }
+
+      choices.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (btn.textContent.trim() === answer) {
+            showSuccess(feedback, handleCorrect);
+          } else {
+            showWrong(feedback);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
