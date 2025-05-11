@@ -1,0 +1,29 @@
+body {
+  margin: 0;
+  font-family: 'Cairo', sans-serif;
+  background-image: url('background.jpeg');
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  text-align: center;
+  direction: rtl;
+}
+
+.container {
+  padding: 30px;
+}
+
+#professor {
+  width: 120px;
+  transition: transform 0.3s ease;
+}
+
+.jump {
+  transform: translateY(-20px);
+}
+
+input, button {
+  padding: 10px;
+  font-size: 16px;
+  margin-top: 10px;
+}
