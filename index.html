@@ -10,9 +10,9 @@
       background-color: #f2f2f2;
       text-align: center;
       padding: 20px;
-      margin: 0; /* منع أي تباعد غير مرغوب فيه */
-      overflow: hidden; /* يمنع التمرير الأفقي */
-      height: 100vh; /* تأكيد أن ارتفاع الصفحة يأخذ كامل الشاشة */
+      margin: 0;
+      overflow: hidden;
+      height: 100vh;
     }
     .question {
       display: none;
@@ -34,13 +34,13 @@
       width: 150px;
       height: auto;
       margin-top: 10px;
-      display: none; /* يبدأ الفيديو مخفي */
+      display: none;
     }
     #win-image {
-      display: none; /* يبدأ الصورة مخفية */
+      display: none;
       width: 100vw;
       height: 100vh;
-      object-fit: cover; /* ملء الشاشة بالصورة */
+      object-fit: cover;
     }
   </style>
 </head>
@@ -48,7 +48,6 @@
   <h1>تدريب على المعادلات</h1>
 
   <div id="quiz-container">
-    <!-- مثال لسؤال نصي -->
     <div class="question active" data-answer="3">
       <img src="images/q1.jpg" alt="q1"><br />
       <input type="text" placeholder="اكتب إجابتك هنا" />
@@ -61,7 +60,6 @@
       <p class="feedback"></p>
     </div>
 
-    <!-- مثال لاختيارات متعددة -->
     <div class="question" data-answer="2">
       <img src="images/q3.jpg" alt="q3"><br />
       <input type="text" placeholder="اكتب إجابتك هنا" />
@@ -101,13 +99,8 @@
     </div>
   </div>
 
-  <!-- صوت النجاح -->
   <audio id="yay-sound" src="yay.mp3"></audio>
-
-  <!-- الفيديو (ستيكر صغير) -->
   <video id="success-video" class="video-sticker" src="sticker.mp4" muted></video>
-
-  <!-- الصورة عند الفوز -->
   <img id="win-image" src="win.jpg" alt="win">
 
   <script>
@@ -124,26 +117,26 @@
     function showSuccess(feedback) {
       feedback.textContent = "✅ صحيح!";
       sound.play();
-      video.style.display = "block"; // يظهر الفيديو
+      video.style.display = "block";
       video.currentTime = 0;
-      video.play(); // يبدأ الفيديو من البداية
+      video.play();
 
       setTimeout(() => {
-        video.style.display = "none"; // يخفي الفيديو بعد 2 ثانية
+        video.style.display = "none"; // إخفاء الفيديو بعد 2 ثانية
         current++;
         if (current < questions.length) {
           showQuestion(current);
         } else {
-          // إذا انتهت الأسئلة، يظهر صورة "win" وصوت
-          winImage.style.display = "block"; // عرض الصورة
-          sound.src = "win.mp3"; // تغيير الصوت لصوت الفوز
-          sound.play(); // تشغيل الصوت
+          // بعد الانتهاء من كل الأسئلة، إظهار صورة "win"
+          winImage.style.display = "block"; // عرض صورة "win"
+          sound.src = "win.mp3"; // تحميل صوت الفوز
+          sound.play(); // تشغيل صوت الفوز
 
           setTimeout(() => {
-            winImage.style.display = "none"; // إخفاء الصورة بعد 6 ثواني
-          }, 6000); // يختفي الصورة بعد 6 ثواني
+            winImage.style.display = "none"; // إخفاء صورة "win" بعد 6 ثواني
+          }, 6000); // يختفي بعد 6 ثواني
         }
-      }, 2000); // يختفي الفيديو بعد 2 ثانية
+      }, 2000); // إخفاء الفيديو بعد 2 ثانية
     }
 
     function showWrong(feedback) {
