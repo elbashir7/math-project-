@@ -10,6 +10,9 @@
       background-color: #f2f2f2;
       text-align: center;
       padding: 20px;
+      margin: 0; /* منع أي تباعد غير مرغوب فيه */
+      overflow: hidden; /* يمنع التمرير الأفقي */
+      height: 100vh; /* تأكيد أن ارتفاع الصفحة يأخذ كامل الشاشة */
     }
     .question {
       display: none;
@@ -32,6 +35,12 @@
       height: auto;
       margin-top: 10px;
       display: none; /* يبدأ الفيديو مخفي */
+    }
+    #win-image {
+      display: none; /* يبدأ الصورة مخفية */
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover; /* ملء الشاشة بالصورة */
     }
   </style>
 </head>
@@ -98,10 +107,14 @@
   <!-- الفيديو (ستيكر صغير) -->
   <video id="success-video" class="video-sticker" src="sticker.mp4" muted></video>
 
+  <!-- الصورة عند الفوز -->
+  <img id="win-image" src="win.jpg" alt="win">
+
   <script>
     const questions = document.querySelectorAll(".question");
     const sound = document.getElementById("yay-sound");
     const video = document.getElementById("success-video");
+    const winImage = document.getElementById("win-image");
     let current = 0;
 
     function showQuestion(index) {
@@ -120,6 +133,15 @@
         current++;
         if (current < questions.length) {
           showQuestion(current);
+        } else {
+          // إذا انتهت الأسئلة، يظهر صورة "win" وصوت
+          winImage.style.display = "block"; // عرض الصورة
+          sound.src = "win.mp3"; // تغيير الصوت لصوت الفوز
+          sound.play(); // تشغيل الصوت
+
+          setTimeout(() => {
+            winImage.style.display = "none"; // إخفاء الصورة بعد 6 ثواني
+          }, 6000); // يختفي الصورة بعد 6 ثواني
         }
       }, 2000); // يختفي الفيديو بعد 2 ثانية
     }
